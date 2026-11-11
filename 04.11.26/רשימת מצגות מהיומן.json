@@ -1,0 +1,85 @@
+{
+  "date": "2026-11-04",
+  "files": [
+    {
+      "id": "14CqSh6pbfWrUfAetQKWlf7J7DksCEZZz",
+      "name": "מושגי יסוד - interpreter & compiler.pptx",
+      "size": 1227847,
+      "path": "/Users/tomerbu/Dropbox/AI Engineering/AI_Engineering_For_Devs/A_661/04.11.26/מושגי יסוד - interpreter & compiler.pptx"
+    },
+    {
+      "id": "1_9M0KS2nLujb4C56TbB-G0KVZpUahCKz",
+      "name": "מושגי יסוד - language elements.pptx",
+      "size": 1161903,
+      "path": "/Users/tomerbu/Dropbox/AI Engineering/AI_Engineering_For_Devs/A_661/04.11.26/מושגי יסוד - language elements.pptx"
+    },
+    {
+      "id": "1_8W30P6T7Fx32KteM91FYf3UZJSdobyG",
+      "name": "מושגי יסוד - lexis.pptx",
+      "size": 1154484,
+      "path": "/Users/tomerbu/Dropbox/AI Engineering/AI_Engineering_For_Devs/A_661/04.11.26/מושגי יסוד - lexis.pptx"
+    },
+    {
+      "id": "1_6ZjGzH-i6X0_29zftHZW_bEz-GJJO9a",
+      "name": "מושגי יסוד -Syntax & Semantics.pptx",
+      "size": 1160002,
+      "path": "/Users/tomerbu/Dropbox/AI Engineering/AI_Engineering_For_Devs/A_661/04.11.26/מושגי יסוד -Syntax & Semantics.pptx"
+    },
+    {
+      "id": "1a0yD_UT68L5RGUd8Okz2YM7wKgwbs06A",
+      "name": "Identin.pptx",
+      "size": 1272796,
+      "path": "/Users/tomerbu/Dropbox/AI Engineering/AI_Engineering_For_Devs/A_661/04.11.26/Identin.pptx"
+    },
+    {
+      "id": "1HIQDcqlM32xpdNgBjRjui2eOEAnYpifG",
+      "name": "הפקודה ()int וקלט מספרים.pptx",
+      "size": 1208589,
+      "path": "/Users/tomerbu/Dropbox/AI Engineering/AI_Engineering_For_Devs/A_661/04.11.26/הפקודה ()int וקלט מספרים.pptx"
+    },
+    {
+      "id": "1R0yi6Lk7ILkdZerO1jR2L0VdbV3eikID",
+      "name": "הפקודה type().pptx",
+      "size": 1212197,
+      "path": "/Users/tomerbu/Dropbox/AI Engineering/AI_Engineering_For_Devs/A_661/04.11.26/הפקודה type().pptx"
+    },
+    {
+      "id": "1JhDJfmjIQNywV2misltpUrTEbe56gtIzZRMStmO7xOQ",
+      "name": "התקנת פייתון.pptx",
+      "size": 2510119,
+      "path": "/Users/tomerbu/Dropbox/AI Engineering/AI_Engineering_For_Devs/A_661/04.11.26/התקנת פייתון.pptx"
+    },
+    {
+      "id": "1ci5IsqB7F345fGobbtnes6iJgNVWpPeK",
+      "name": "משתנים - boolean.pptx",
+      "size": 1257465,
+      "path": "/Users/tomerbu/Dropbox/AI Engineering/AI_Engineering_For_Devs/A_661/04.11.26/משתנים - boolean.pptx"
+    },
+    {
+      "id": "1p2bs0Tg5OBKJ2YGc0DFe3kqLlj0qGAVlcrNeYLDYV-o",
+      "name": "אופרטורים מקוצרים + שילוב של מספר תנאים.pptx",
+      "size": 3373845,
+      "path": "/Users/tomerbu/Dropbox/AI Engineering/AI_Engineering_For_Devs/A_661/04.11.26/אופרטורים מקוצרים + שילוב של מספר תנאים.pptx"
+    },
+    {
+      "id": "1bV1EO1euyiVouJrY0GOJCPkR-zAHcrC4",
+      "name": "שימוש ב Escape Characters.pptx",
+      "path": "/Users/tomerbu/Dropbox/AI Engineering/AI_Engineering_For_Devs/A_661/04.11.26/שימוש ב Escape Characters.pptx"
+    }
+  ],
+  "unavailable": [
+    {
+      "title": "naming convention",
+      "id": "1YR-acvRE6RMawyLsYqoToQbcJ5CDYCtBoJADqTxbCnU"
+    },
+    {
+      "title": "אופרטורים וביטויים בוליאניים + אופרטורים יחסיים",
+      "id": "1Ak-77WE22hlAtTnmdnc0BklN-TkaJO0-"
+    }
+  ],
+  "notes": [
+    "קישור היכרות עם גוגל קולאב ביומן מוביל למצגת הפקודה int וקלט מספרים; נשמר השם האמיתי.",
+    "למצגת שימוש ב Escape Characters נמצא עותק נגיש באוסף פייתון במקום הקישור החסר ביומן.",
+    "הקישור להתקנת פייתון ולהתקנת אדיטור זהה; נשמר עותק אחד."
+  ]
+}

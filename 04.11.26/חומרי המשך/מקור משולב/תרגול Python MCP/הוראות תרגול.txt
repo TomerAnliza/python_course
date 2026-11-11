@@ -1,0 +1,65 @@
+תרגול סביבת פייתון ו־MCP — שיעור 02.11.2026
+
+הקבצים המצורפים
+הקובץ hello.py בודק את ההרצה ואת נתיב המפרש.
+הקובץ server.py מכיל שרת עם שני כלים, משאב ותבנית פרומפט.
+הקובץ requirements.txt קובע את תלויות המעבדה.
+
+הכנה ב־Windows
+פתחי תיקיית פרויקט בעורך, והעתיקי אליה את הקבצים.
+הריצי בטרמינל של הפרויקט:
+py -3.13 -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install -r requirements.txt
+python hello.py
+
+הכנה ב־Mac
+הריצי בטרמינל של הפרויקט:
+python3.13 -m venv .venv
+source .venv/bin/activate
+python -m pip install -r requirements.txt
+python hello.py
+
+חלופה כאשר ההפעלה ב־PowerShell חסומה
+הריצי דרך המפרש ישירות, בלי לשנות מדיניות אבטחה:
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
+.\.venv\Scripts\python.exe hello.py
+
+הפעלת המפקח
+התקיני Node.js בגרסת LTS תואמת. נדרשת גרסה 22.19 ומעלה.
+בטרמינל שבו הסביבה פעילה:
+npx @modelcontextprotocol/inspector python server.py
+בחלופה ללא הפעלה ב־Windows:
+npx @modelcontextprotocol/inspector .\.venv\Scripts\python.exe server.py
+פתחי את הכתובת שהטרמינל מדפיס. האסימון שבכתובת הוא מקומי ואין לשתף אותו.
+בחרי Connect אם צריך, ולאחר מכן Tools ו־List Tools.
+
+משימות בדיקה
+הפעילי add עם a=7, b=5. התוצאה הצפויה היא 12.
+הפעילי read_doc עם doc_id=welcome. התוצאה מכילה הודעת פתיחה.
+הפעילי read_doc עם doc_id=missing. צפויה שגיאה עם הסבר.
+פתחי Resources וקראי את classroom://guide.
+פתחי Prompts ובקשי study_plan עם topic=Python.
+התבנית מחזירה הודעה. היא אינה מפעילה מודל ואינה מייצרת תוכנית לימוד בעצמה.
+
+הרחבה עצמית
+הוסיפי כלי multiply עם שני פרמטרים מסוג int ותיאור מתאים.
+שמרי, הפעילי מחדש את השרת ובקשי רשימת כלים חדשה.
+בדקי את הזוגות 3 ו־4, 0 ו־8, וכן מינוס 2 ו־5.
+תוצאות צפויות: 12, 0, מינוס 10.
+
+תיעוד קצר לכל בדיקה
+רשמי את שם הכלי, הקלט, התוצאה הצפויה, התוצאה בפועל והאם הבדיקה עברה.
+אם בדיקה נכשלה, רשמי מה שינית ובצעי אותה שוב.
+
+בדיקת מוכנות לשיעור הבא
+סגרי את העורך ופתחי מחדש את הפרויקט.
+בחרי את מפרש .venv והריצי hello.py שוב.
+ודאי שהנתיב בפלט כולל את תיקיית .venv של הפרויקט שלך.
+שמרי את הקוד ואת קובץ התלויות. אין צורך לשתף את תיקיית .venv.
+
+מקורות
+החומר בעברית: https://claude.itomers.com/introduction-to-model-context-protocol/
+התיעוד הרשמי: https://github.com/modelcontextprotocol/python-sdk
+מדריך העורך: https://code.visualstudio.com/docs/python/python-tutorial
+המפקח: https://modelcontextprotocol.io/docs/tools/inspector

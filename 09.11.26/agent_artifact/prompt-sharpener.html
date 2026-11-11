@@ -1,0 +1,238 @@
+<title>מחדד פרומפטים</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* פריסה: עמודה אחת צרה, כמו מחברת מעבדה — קלט למעלה, תוצר מתחתיו, הערות בצד התוצר */
+:root {
+  --bg: #eef1f3;
+  --surface: #ffffff;
+  --ink: #14202b;
+  --muted: #5b6b78;
+  --line: #d3dae0;
+  --accent: #0b6e6e;
+  --accent-ink: #ffffff;
+  --warn: #9a5b00;
+  --code-bg: #f6f8f9;
+  --font-body: "Heebo", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0e1519; --surface: #151f25; --ink: #e6edf1; --muted: #8fa1ad;
+    --line: #26343c; --accent: #4cc2b8; --accent-ink: #06201e; --warn: #e0a44a; --code-bg: #0f181d;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0e1519; --surface: #151f25; --ink: #e6edf1; --muted: #8fa1ad;
+  --line: #26343c; --accent: #4cc2b8; --accent-ink: #06201e; --warn: #e0a44a; --code-bg: #0f181d;
+  color-scheme: dark;
+}
+body { background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 16px; line-height: 1.6; direction: rtl;
+  padding-block: 32px 56px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+main { max-width: 760px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
+h1 { font-size: clamp(1.6rem, 4vw, 2.1rem); font-weight: 800; margin: 0; text-wrap: balance; }
+.sub { color: var(--muted); margin: 4px 0 0; }
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 18px; display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+label { font-weight: 700; font-size: .9rem; }
+textarea, select { font: inherit; color: var(--ink); background: var(--code-bg); border: 1px solid var(--line); border-radius: 4px; padding: 10px 12px; width: 100%; box-sizing: border-box; }
+textarea { min-height: 170px; resize: vertical; line-height: 1.55; }
+textarea:focus-visible, select:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.row { display: flex; gap: 12px; flex-wrap: wrap; align-items: flex-end; }
+.field { display: flex; flex-direction: column; gap: 6px; flex: 1 1 240px; min-width: 0; }
+button { font: inherit; font-weight: 700; border-radius: 4px; padding: 10px 20px; cursor: pointer; border: 1px solid var(--accent); background: var(--accent); color: var(--accent-ink); }
+button.ghost { background: transparent; color: var(--accent); }
+button:disabled { opacity: .5; cursor: not-allowed; }
+.badge { font-size: .8rem; color: var(--muted); display: flex; gap: 8px; align-items: center; }
+.dot { width: 9px; height: 9px; border-radius: 50%; background: var(--muted); display: inline-block; }
+.dot.on { background: var(--accent); }
+.status { color: var(--muted); font-size: .9rem; min-height: 1.4em; }
+.status.err { color: var(--warn); }
+.log { font-family: var(--font-mono); font-size: .78rem; color: var(--muted); direction: ltr; text-align: left; display: flex; flex-direction: column; gap: 2px; overflow-wrap: anywhere; }
+.out-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.out-head h2 { font-size: 1rem; margin: 0; }
+pre.prompt { font-family: var(--font-mono); font-size: .88rem; line-height: 1.6; background: var(--code-bg); border: 1px solid var(--line); border-radius: 4px; padding: 14px; margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; unicode-bidi: plaintext; text-align: start; }
+.notes { white-space: pre-wrap; color: var(--muted); font-size: .92rem; overflow-wrap: anywhere; }
+.notes strong { color: var(--ink); }
+.lock { text-align: center; padding: 48px 16px; }
+</style>
+
+<main id="app">
+  <header>
+    <h1>מחדד פרומפטים</h1>
+    <p class="sub">כותבים טיוטה גסה, בוחרים מודל יעד, והסוכן מחפש את ההנחיות הרשמיות של אותו מודל ובונה פרומפט מדויק.</p>
+  </header>
+
+  <section class="panel lock" id="lock" hidden>
+    <h2>הדף הזה פרטי</h2>
+    <p class="sub">רק הבעלים של הדף יכול להשתמש בסוכן.</p>
+  </section>
+
+  <section class="panel" id="tool">
+    <div class="field">
+      <label for="draft">הטיוטה שלך</label>
+      <textarea id="draft" placeholder="למשל: תכתוב לי מייל ללקוח שמתעכב בתשלום, שיהיה אדיב אבל תקיף"></textarea>
+    </div>
+    <div class="row">
+      <div class="field">
+        <label for="model">מודל יעד</label>
+        <select id="model"></select>
+      </div>
+      <div class="field" id="customWrap" hidden>
+        <label for="custom">שם המודל</label>
+        <input id="custom" type="text" dir="ltr" style="font:inherit;color:var(--ink);background:var(--code-bg);border:1px solid var(--line);border-radius:4px;padding:10px 12px;width:100%;box-sizing:border-box" placeholder="Model name and version">
+      </div>
+      <button id="go" type="button">שפר את הפרומפט</button>
+      <button id="stop" type="button" class="ghost" hidden>עצור</button>
+    </div>
+    <div class="badge"><span class="dot" id="dot"></span><span id="searchState">בודק זמינות חיפוש ברשת…</span></div>
+    <div class="status" id="status" role="status"></div>
+    <div class="log" id="log"></div>
+  </section>
+
+  <section class="panel" id="result" hidden>
+    <div class="out-head">
+      <h2>הפרומפט המשופר</h2>
+      <button id="copy" type="button" class="ghost" hidden>העתק</button>
+    </div>
+    <pre class="prompt" id="promptOut" dir="auto"></pre>
+    <div class="notes" id="notesOut"></div>
+  </section>
+</main>
+
+<script>
+// רשימת המודלים. ייתכן שאינה מעודכנת, לכן יש גם אפשרות "אחר".
+const MODELS = {
+  "Anthropic": ["Claude Fable 5.1", "Claude Opus 5.5", "Claude Sonnet 5.5", "Claude Haiku 5.5"],
+  "OpenAI": ["GPT-5.4", "GPT-5 mini", "o-series (reasoning)"],
+  "Google": ["Gemini 3 Pro", "Gemini 3 Flash"],
+  "xAI": ["Grok 4"],
+  "Meta": ["Llama 4"],
+  "קוד פתוח ואחרים": ["DeepSeek V3 / R1", "Qwen 3", "Mistral Large", "Kimi K2"]
+};
+const $ = id => document.getElementById(id);
+const sel = $("model");
+for (const [g, list] of Object.entries(MODELS)) {
+  const og = document.createElement("optgroup"); og.label = g;
+  list.forEach(m => { const o = document.createElement("option"); o.value = m; o.textContent = m; og.append(o); });
+  sel.append(og);
+}
+const other = document.createElement("option"); other.value = "__other"; other.textContent = "אחר (להקליד שם)"; sel.append(other);
+sel.addEventListener("change", () => { $("customWrap").hidden = sel.value !== "__other"; });
+
+const INSTRUCTIONS = `You are a senior prompt engineer. Turn the user's rough draft into a high-quality prompt tailored to the TARGET MODEL.
+
+Process:
+1. If you have the web_search and fetch_page tools, first search for the official prompting guidance of the TARGET MODEL (vendor docs, model card, prompting guide). Prefer official sources. Do at most 3 searches and 2 page fetches. If a tool fails or is unavailable, continue from your own knowledge and say so in the notes.
+2. Infer the real goal, audience and constraints from the draft. If something critical is missing, do not invent facts: add a clearly marked [placeholder] in the prompt.
+3. Write the improved prompt applying core prompt-engineering principles: clear role only when it helps; explicit task and success criteria; relevant context and constraints; input/data separated from instructions with delimiters or XML tags; a precise output format; one or two examples when format or tone matters; step-by-step reasoning or a plan where the model benefits from it; instructions stated positively (what to do); handling of edge cases and uncertainty ("say when you don't know"); no filler or vague adjectives. Then adapt it to the target model's own documented conventions (for example formatting style, reasoning/thinking controls, system vs user placement, structured-output features).
+4. Keep the prompt in the same language as the draft unless the draft asks otherwise.
+
+Output EXACTLY in this format and nothing else:
+<prompt>
+the final prompt, ready to paste
+</prompt>
+<notes>
+Write in Hebrew. A short bullet list: what you changed and why; which model-specific guidance you applied; sources (URLs) you actually read, or an explicit statement that no search was done and the guidance is from memory and unverified.
+</notes>`;
+
+let ctl = null, mcp = null, sample = null, searchOn = false, schemaCache = {};
+const TAVILY = "Tavily";
+// שמות הכלים של Tavily לא אומתו מול המחבר, לכן מנסים את שתי הצורות הנפוצות
+const CANDIDATES = { search: ["tavily_search", "tavily-search"], extract: ["tavily_extract", "tavily-extract"] };
+let realNames = null;
+
+function setStatus(t, err) { $("status").textContent = t || ""; $("status").classList.toggle("err", !!err); }
+function logLine(t) { const d = document.createElement("div"); d.textContent = t; $("log").append(d); }
+function textOf(res) {
+  const p = res && res.payload;
+  const s = typeof p === "string" ? p : p != null ? JSON.stringify(p) : (res.content || []).map(c => c.text || "").join("\n");
+  return s.slice(0, 7000);
+}
+
+// בונה קלט לפי הסכמה האמיתית של הכלי כשהיא זמינה, כדי לא לשלוח שדות שלא קיימים
+async function buildInput(tool, base) {
+  if (!schemaCache[tool]) schemaCache[tool] = await mcp.describeTool(TAVILY, tool).catch(() => null);
+  const props = schemaCache[tool] && schemaCache[tool].inputSchema && schemaCache[tool].inputSchema.properties;
+  if (!props) return base;
+  const out = {};
+  for (const k of Object.keys(base)) if (k in props) out[k] = base[k];
+  return out;
+}
+async function tavily(kind, base) {
+  const re = kind === "search" ? /search/i : /extract/i;
+  const names = realNames && realNames.some(n => re.test(n)) ? realNames.filter(n => re.test(n)) : CANDIDATES[kind];
+  let lastErr;
+  for (const n of names) {
+    try { return textOf(await mcp.callTool(TAVILY, n, await buildInput(n, base))); }
+    catch (e) { lastErr = e; if (e && (e.code === "cancelled" || e.code === "needs_reauth" || e.code === "server_not_connected")) break; }
+  }
+  throw new Error("Tavily failed: " + (lastErr && lastErr.code ? lastErr.code : "unknown"));
+}
+const TOOLS = () => [
+  { name: "web_search", description: "Search the web with Tavily. Returns ranked results with titles, URLs and content snippets.",
+    inputSchema: { type: "object", properties: { query: { type: "string" } }, required: ["query"] },
+    async execute(i) { const q = String(i.query || ""); logLine("חיפוש: " + q); return tavily("search", { query: q, max_results: 5 }); } },
+  { name: "fetch_page", description: "Extract the content of a URL with Tavily. Use for official documentation pages.",
+    inputSchema: { type: "object", properties: { url: { type: "string" } }, required: ["url"] },
+    async execute(i) { const u = String(i.url || ""); if (!/^https:\/\//.test(u)) throw new Error("https only"); logLine("קורא: " + u); return tavily("extract", { urls: [u], url: u }); } }
+];
+
+function render(raw) {
+  const p = /<prompt>\s*([\s\S]*?)\s*(?:<\/prompt>|$)/.exec(raw);
+  const n = /<notes>\s*([\s\S]*?)\s*(?:<\/notes>|$)/.exec(raw);
+  $("promptOut").textContent = p ? p[1] : raw;
+  $("notesOut").textContent = n ? n[1] : "";
+  $("copy").hidden = !p || !p[1];
+}
+
+async function run() {
+  const draft = $("draft").value.trim();
+  const model = sel.value === "__other" ? $("custom").value.trim() : sel.value;
+  if (!draft) return setStatus("כתוב קודם טיוטה.", true);
+  if (!model) return setStatus("הקלד את שם המודל.", true);
+  ctl = new AbortController();
+  $("go").disabled = true; $("stop").hidden = false; $("log").textContent = "";
+  $("result").hidden = false; $("copy").hidden = true; $("promptOut").textContent = ""; $("notesOut").textContent = "";
+  setStatus("חושב…");
+  const opts = { signal: ctl.signal, cache: false, onText: ({ text }) => { setStatus("כותב…"); render(text); } };
+  if (searchOn) { opts.tools = TOOLS(); delete opts.cache; opts.cache = undefined; }
+  try {
+    const { text, truncated } = await sample(INSTRUCTIONS + "\n\nTARGET MODEL: " + model + "\n\nTODAY: " + new Date().toISOString().slice(0, 10) + "\n\nUSER DRAFT:\n" + draft, searchOn ? { signal: ctl.signal, onText: opts.onText, tools: opts.tools } : opts);
+    render(text);
+    setStatus(truncated ? "התשובה נחתכה. נסה טיוטה קצרה יותר." : "הושלם.", truncated);
+  } catch (e) {
+    if (e && e.text) render(e.text);
+    const msg = { cancelled: "", not_granted: "לא ניתנה הרשאה להשתמש ב-Claude בדף הזה.", rate_limited: "יותר מדי קריאות. נסה שוב בעוד רגע.", refused: "Claude סירב לבקשה. שנה את הטיוטה.", upstream_error: "שגיאת חיבור. נסה שוב." }[e && e.code];
+    setStatus(msg !== undefined ? msg : "שגיאה: " + (e && e.code), e && e.code !== "cancelled");
+  } finally { $("go").disabled = false; $("stop").hidden = true; ctl = null; }
+}
+
+$("go").addEventListener("click", run);
+$("stop").addEventListener("click", () => ctl && ctl.abort());
+$("copy").addEventListener("click", async () => {
+  const t = $("promptOut").textContent;
+  try { await navigator.clipboard.writeText(t); $("copy").textContent = "הועתק"; }
+  catch { const r = document.createRange(); r.selectNodeContents($("promptOut")); const s = getSelection(); s.removeAllRanges(); s.addRange(r); $("copy").textContent = "סומן, לחץ העתק"; }
+  setTimeout(() => { $("copy").textContent = "העתק"; }, 1800);
+});
+
+(async function boot() {
+  const user = await claude.use("user");
+  if (!user || !user.isOwner()) { $("tool").hidden = true; $("lock").hidden = false; return; }
+  sample = await claude.use("sample");
+  if (!sample) { setStatus("הסוכן אינו זמין בתצוגה הזו. פתח את הדף ב-claude.ai.", true); $("go").disabled = true; return; }
+  const limits = await sample.limits().catch(() => ({}));
+  mcp = await claude.use("mcp");
+  if (mcp && limits.tools) {
+    try {
+      const l = await mcp.listTools(TAVILY);
+      const srv = l.servers.find(x => x.server === TAVILY);
+      searchOn = !!srv && srv.authStatus !== "needs_reauth" && srv.tools.length > 0;
+      if (srv && srv.authStatus === "connected") realNames = srv.tools.map(t => t.name);
+    } catch { searchOn = false; }
+  }
+  $("dot").classList.toggle("on", searchOn);
+  $("searchState").textContent = searchOn ? "חיפוש ברשת פעיל (Tavily)" : "מחבר Tavily לא מחובר. הוסף אותו ב-claude.ai, בהגדרות המחברים. בינתיים הסוכן עובד מהידע שלו ומסמן זאת";
+})();
+</script>

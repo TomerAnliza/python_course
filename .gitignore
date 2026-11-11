@@ -1,0 +1,31 @@
+# The separate Python course is not part of the taught lesson materials.
+/python_course/
+
+# Local agent configuration and generated presentation assets.
+/.claude/
+/.vscode/
+/.playwright-mcp/
+/.presentation-build/
+/.mcp.json
+.build/
+
+# Local environments, caches, credentials, and participant chat.
+.venv/
+venv/
+env/
+node_modules/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.env
+.env.*
+!.env.example
+!.env.sample
+meeting_saved*chat*.txt
+.DS_Store
+Thumbs.db
+
+# Old aggregate archive; dated lesson folders are the source of truth.
+/a_661.zip
