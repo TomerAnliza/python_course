@@ -1,6 +1,9 @@
 # The separate Python course is not part of the taught lesson materials.
 /python_course/
 
+# Keynote presentations stay local.
+*.[kK][eE][yY]
+
 # Local agent configuration and generated presentation assets.
 /.claude/
 /.vscode/
